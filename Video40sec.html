@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        /* Template on GAM - Mobile */
+        .background_all {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            z-index: 30000;
+            display: none;
+        }
+
+        .close-url {
+            display: none;
+            z-index: 30000;
+        }
+
+        .countdown {
+            position: absolute;
+            top: 9px;
+            right: 13px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 2px 1px #000000;
+            z-index: 10000;
+        }
+
+        .unmute-button {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: red;
+            border-radius: 10px;
+            font-size: 11px;
+            padding: 5px;
+            cursor: pointer;
+            z-index: 10000;
+        }
+
+        .mute-button {
+            position: absolute;
+            top: 25px;
+            left: 12px;
+            width: 25px;
+            cursor: pointer;
+            z-index: 10000;
+            display: none;
+        }
+
+        .playpause {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            width: 15px;
+            cursor: pointer;
+            z-index: 10000;
+        }
+
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            z-index: 9000;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background_all">
+        <!-- First Div -->
+        <div class="first_div" id="firstDiv" style="
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        z-index: 80;
+        right: 0px;
+        ">
+            <span class="countdown" id="countdown"></span>
+            <a class="close-url" target="_top">
+                <img class="close-button" src="https://cms.mncplus.com/files/fta_rcti/Ads/TS/btn_close.png"
+                    onclick="closeAd()" />
+            </a>
+        </div>
+
+        <!-- Second Div -->
+        <div class="second_div" id="secondDiv" style="
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            z-index: 70;
+            right: 0px;
+            ">
+        </div>
+
+        <!-- Third Div -->
+        <div class="third_div" id="thirdDiv">
+            <div>
+                <button class="unmute-button" onclick="toggleMute()">
+                    Tap to Unmute
+                </button>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading-indicator" id="loadingIndicator">Loading...</div>
+
+            <!--- VIDEO & LANDING PAGE --->
+            <!--- LANDING PAGE ----------------------------------------->
+            <a href="https://ad.doubleclick.net/ddm/trackclk/N469802.3715508RCTIPLUS/B34172838.428770369;dc_trk_aid=622178608;dc_trk_cid=241260398;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_755};ltd=;dc_tdv=1"
+                target="_blank" style="
+position: absolute;
+width: 320px;
+height: 450px;
+top: 50px;
+z-index: 8000;
+"></a>
+            <video id="adVideo" autoplay loop muted playsinline preload="auto" controlslist="nofullscreen"
+                style="width: 100%; height: 100%" onended="videoEnded()" oncanplay="videoCanPlay()"
+                onloadstart="videoLoadStart()" onwaiting="videoWaiting()" onplaying="videoPlaying()">
+                <!-- VIDEO------------------------------------------------------- -->
+                <source src="https://files.catbox.moe/glxqin.mp4" type="video/mp4" />
+
+            </video>
+
+            <img class="mute-button" src="https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/buttonmute.png"
+                alt="Mute" onclick="toggleMute()" />
+            <img id="playPauseButton" class="playpause"
+                src="https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/button_pause.png" alt="Play"
+                onclick="togglePlayPause()" />
+        </div>
+    </div>
+
+    <script>
+        var countdownTime = 6;
+        var countdownStarted = false;
+
+        function videoLoadStart() {
+            // Show loading indicator when video starts loading
+            document.getElementById("loadingIndicator").style.display = "block";
+            console.log("Video loading started");
+        }
+
+        function videoWaiting() {
+            // Show loading indicator when video is buffering
+            document.getElementById("loadingIndicator").style.display = "block";
+            console.log("Video buffering");
+        }
+
+        function videoPlaying() {
+            // Hide loading indicator when video starts playing
+            document.getElementById("loadingIndicator").style.display = "none";
+            console.log("Video playing");
+        }
+
+        function videoCanPlay() {
+            // Video has enough data to start playing
+            document.getElementById("loadingIndicator").style.display = "none";
+            if (!countdownStarted) {
+                startCountdown();
+                countdownStarted = true;
+            }
+            console.log("Video can play");
+        }
+
+        function updateCountdown(event) {
+            document.getElementById("countdown").innerHTML = countdownTime;
+            countdownTime--;
+            if (countdownTime < 0) {
+                document.getElementById("countdown").style.display = "none";
+                document.querySelector(".close-button").style.display = "block";
+                document.querySelector(".close-url").style.display = "block";
+            } else {
+                setTimeout(updateCountdown, 1000);
+                if (event) {
+                    event.preventDefault();
+                }
+            }
+        }
+
+        function startCountdown() {
+            document.getElementById("firstDiv").style.display = "block";
+            document.getElementById("secondDiv").style.display = "block";
+            document.getElementById("thirdDiv").style.display = "block";
+            setTimeout(function () {
+                updateCountdown();
+            }, 500);
+        }
+
+        function closeAd() {
+            if (window.CleverTap) {
+                CleverTap.dismissInAppNotification();
+            } else {
+                window.location.href = "wzrk://thisleads";
+            }
+        }
+
+        function toggleMute() {
+            var video = document.getElementById("adVideo");
+            video.muted = !video.muted;
+            var umuteButton = document.querySelector(".unmute-button");
+            var muteButton = document.querySelector(".mute-button");
+            if (video.muted) {
+                umuteButton.style.display = "block";
+                muteButton.style.display = "none";
+            } else {
+                umuteButton.style.display = "none";
+                muteButton.style.display = "block";
+            }
+        }
+
+        function videoEnded() {
+            var video = document.getElementById("adVideo");
+            video.play();
+        }
+
+        var video = document.getElementById("adVideo");
+        var playPauseButton = document.getElementById("playPauseButton");
+
+        function togglePlayPause() {
+            if (video.paused) {
+                video.play();
+                playPauseButton.src =
+                    "https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/button_pause.png";
+            } else {
+                video.pause();
+                playPauseButton.src =
+                    "https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/button_play.png";
+            }
+        }
+
+        // Ensure video starts playing as soon as enough data is available
+        video.addEventListener('loadeddata', function () {
+            console.log("Video data loaded");
+            video.play().catch(function (error) {
+                console.log("Autoplay prevented:", error);
+            });
+        });
+
+        // Handle video stalling
+        video.addEventListener('stalled', function () {
+            console.log("Video download stalled");
+            document.getElementById("loadingIndicator").style.display = "block";
+        });
+
+        // Handle video progress
+        video.addEventListener('progress', function () {
+            if (video.buffered.length > 0) {
+                var bufferedEnd = video.buffered.end(video.buffered.length - 1);
+                var duration = video.duration;
+                if (duration > 0) {
+                    var percentBuffered = (bufferedEnd / duration) * 100;
+                    console.log("Buffered: " + percentBuffered.toFixed(2) + "%");
+                }
+            }
+        });
+
+        //Code pour User Agent----------------------------------------------------------------
+
+        var isAndroid = /(android)/i.test(navigator.userAgent);
+        var isiOS = /(iphone|ipad)/i.test(navigator.userAgent);
+
+        if (isAndroid) {
+            console.log("CleverTap campaign opened on Android.");
+        } else if (isiOS) {
+            console.log("CleverTap campaign opened on iOS.");
+        } else {
+            console.log("CleverTap campaign opened on another platform.");
+        }
+    </script>
+</body>
+
+</html

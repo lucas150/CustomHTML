@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+/* Template on GAM - Mobile */
+.background_all {
+position: relative;
+width: 320px;
+height: 550px;
+display: block;
+margin-right: auto;
+margin-left: auto;
+}
+
+.close-button {
+position: absolute;
+top: 8px;
+right: 8px;
+width: 25px;
+height: 25px;
+cursor: pointer;
+z-index: 30000;
+display: none;
+}
+
+.close-url {
+display: none;
+z-index: 30000;
+}
+
+.countdown {
+position: absolute;
+top: 9px;
+right: 13px;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 20px;
+font-weight: bold;
+color: white;
+text-shadow: 3px 2px 1px #000000;
+z-index: 10000;
+}
+
+.unmute-button {
+position: absolute;
+top: 25px;
+left: 5px;
+background-color: rgba(0, 0, 0, 0.5);
+color: red;
+border-radius: 10px;
+font-size: 11px;
+padding: 5px;
+cursor: pointer;
+z-index: 10000;
+}
+
+.mute-button {
+position: absolute;
+top: 25px;
+left: 12px;
+width: 25px;
+cursor: pointer;
+z-index: 10000;
+display: none;
+}
+
+.playpause {
+position: absolute;
+bottom: 40px;
+left: 20px;
+width: 15px;
+cursor: pointer;
+z-index: 10000;
+}
+</style>
+</head>
+
+<body>
+<div class="background_all">
+<!-- Tracker IAS -->
+<script
+type="application/javascript"
+src="https://pixel.adsafeprotected.com/rjss/st/2640645/89858788/skeleton.js"
+></script>
+<noscript
+><img
+src="https://pixel.adsafeprotected.com/rfw/st/2640645/89858787/skeleton.gif?gdpr=${GDPR}&gdpr_consent=${GDPR_CONSENT_278}&gdpr_pd=${GDPR_PD}"
+border="0"
+width="1"
+height="1"
+alt=""
+/></noscript>
+
+<!-- Tracker DCM -->
+<img
+src="https://ad.doubleclick.net/ddm/trackimp/N469802.3715508RCTIPLUS/B34172838.428770369;dc_trk_aid=622178608;dc_trk_cid=241260398;ord=%%CACHEBUSTER%%;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_755};ltd=;dc_tdv=1?"
+attributionsrc
+border="0"
+height="1"
+width="1"
+alt="Advertisement"
+/>
+
+<!-- First Div -->
+<div
+class="first_div"
+id="firstDiv"
+style="
+position: absolute;
+width: 50px;
+height: 50px;
+z-index: 80;
+right: 0px;
+"
+>
+<span class="countdown" id="countdown"></span>
+<a class="close-url" target="_top">
+<img
+class="close-button"
+src="https://cms.mncplus.com/files/fta_rcti/Ads/TS/btn_close.png"
+onclick="closeAd()"
+/>
+</a>
+</div>
+
+<!-- Second Div -->
+<div
+class="second_div"
+id="secondDiv"
+style="
+position: absolute;
+width: 50px;
+height: 50px;
+z-index: 70;
+right: 0px;
+"
+>
+<!-- <a href="wzrk://thisisadummylink" target="_top"></a> -->
+</div>
+
+<!-- Third Div -->
+<div class="third_div" id="thirdDiv">
+<div>
+<button class="unmute-button" onclick="toggleMute()">
+Tap to Unmute
+</button>
+</div>
+
+<!--- VIDEO & LANDING PAGE --->
+<!--- LANDING PAGE ----------------------------------------->
+<a
+href="https://ad.doubleclick.net/ddm/trackclk/N469802.3715508RCTIPLUS/B34172838.428770369;dc_trk_aid=622178608;dc_trk_cid=241260398;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_755};ltd=;dc_tdv=1"
+target="_blank"
+style="
+position: absolute;
+width: 320px;
+height: 450px;
+top: 50px;
+z-index: 8000;
+"
+></a>
+<video
+id="adVideo"
+autoplay
+loop
+muted
+playsinline
+controlslist="nofullscreen"
+style="width: 100%; height: 100%"
+onended="videoEnded()"
+oncanplay="startCountdown()"
+>
+<!-- VIDEO------------------------------------------------------- -->
+<source
+src="https://stream.rctiplus.id/ads/pop_up_ads_dss_20251007142810.mp4"
+/>
+</video>
+
+<img
+class="mute-button"
+src="https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/buttonmute.png"
+alt="Mute"
+onclick="toggleMute()"
+/>
+<img
+id="playPauseButton"
+class="playpause"
+src="https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/button_pause.png"
+alt="Play"
+onclick="togglePlayPause()"
+/>
+</div>
+</div>
+
+<script>
+var countdownTime = 6;
+
+function updateCountdown(event) {
+document.getElementById("countdown").innerHTML = countdownTime;
+countdownTime--;
+if (countdownTime < 0) {
+document.getElementById("countdown").style.display = "none";
+document.querySelector(".close-button").style.display = "block";
+document.querySelector(".close-url").style.display = "block";
+} else {
+setTimeout(updateCountdown, 1000);
+event.preventDefault();
+}
+}
+
+function startCountdown() {
+document.getElementById("firstDiv").style.display = "block";
+document.getElementById("secondDiv").style.display = "block";
+document.getElementById("thirdDiv").style.display = "block";
+setTimeout(function () {
+updateCountdown();
+}, 500); // Delay for 0.5 seconds before starting countdown
+}
+
+function closeAd() {
+if (window.CleverTap) {
+// For Android WebViews
+CleverTap.dismissInAppNotification();
+} else {
+// Fallback
+window.location.href = "wzrk://thisleads";
+}
+}
+
+function toggleMute() {
+var video = document.getElementById("adVideo");
+video.muted = !video.muted;
+var umuteButton = document.querySelector(".unmute-button");
+var muteButton = document.querySelector(".mute-button");
+if (video.muted) {
+umuteButton.style.display = "block";
+muteButton.style.display = "none";
+} else {
+umuteButton.style.display = "none";
+muteButton.style.display = "block";
+}
+}
+
+function videoEnded() {
+//Jika ingin video looping
+var video = document.getElementById("adVideo");
+//video.load(); -> Jika pakai ini kemungkinan akan load lagi dan ada jeda loading
+video.play();
+
+//Jika menggunakan reload button
+//var reloadButton = document.querySelector(".reload-button");
+//reloadButton.style.display = "block"; // Show the reload button when the video ends
+}
+
+//Jika ingin menggunakan reload button
+function reloadVideo() {
+var reloadButton = document.querySelector(".reload-button");
+reloadButton.style.display = "none"; // Hide the reload button when clicked
+var video = document.getElementById("adVideo");
+video.load();
+video.play();
+}
+
+var video = document.getElementById("adVideo");
+var playPauseButton = document.getElementById("playPauseButton");
+
+function togglePlayPause() {
+if (video.paused) {
+video.play();
+playPauseButton.src =
+"https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/button_pause.png";
+} else {
+video.pause();
+playPauseButton.src =
+"https://cms.mncplus.com/files/fta_rcti/Ads/TS/CleverTab/button_play.png";
+}
+}
+
+//Code untuk User Agent----------------------------------------------------------------
+
+var isAndroid = /(android)/i.test(navigator.userAgent);
+
+// Check if the user is on an iOS device
+var isiOS = /(iphone|ipad)/i.test(navigator.userAgent);
+
+var countdownTimer = document.querySelector(".ts_countdown_timer");
+var labelCountdown = document.querySelector(".label_countdown_costom");
+var labelDKI = document.querySelector(".label_DKI_Jakarta");
+var datetime = document.querySelector(".ts_datetime");
+
+if (isAndroid) {
+console.log("CleverTap campaign opened on Android.");
+// Add Android-specific code or customize behavior
+
+countdownTimer.style.top = "202px";
+labelCountdown.style.top = "224px";
+labelCountdown.style.marginLeft = "92px";
+labelDKI.style.left = "97px";
+datetime.style.left = "115px";
+} else if (isiOS) {
+console.log("CleverTap campaign opened on iOS.");
+// Add iOS-specific code or customize behavior
+countdownTimer.style.top = "207px";
+} else {
+console.log("CleverTap campaign opened on another platform.");
+// Add default behavior if needed
+
+countdownTimer.style.top = "207px";
+}
+
+//End of User Agent--------------------------------------------------------------------
+
+//-- 3. GANTI WAKTU TIME SIGNAL dg format --> 00:00:00 ==================================================================
+var countDownDate = new Date("Jul 30, 2035 18:03:00").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function () {
+// Get today's date and time
+var now = new Date().getTime();
+
+// Find the distance between now and the count down date
+var distance = countDownDate - now;
+
+// Time calculations for days, hours, minutes and seconds
+//var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+var hours = Math.floor(
+(distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+);
+var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+// Output the result in an element with id="demo"
+document.getElementById("hours").innerHTML = hours;
+document.getElementById("minutes").innerHTML = minutes;
+document.getElementById("seconds").innerHTML = seconds;
+
+// If the count down is over, write some text
+if (distance < 0) {
+clearInterval(x);
+document.getElementById("demo").innerHTML = "EXPIRED";
+}
+
+//Kondisi "<10"
+if (hours < 10) {
+document.getElementById("hours").innerHTML = "0" + hours;
+} else {
+document.getElementById("hours").innerHTML = hours;
+}
+
+if (minutes < 10) {
+document.getElementById("minutes").innerHTML = "0" + minutes;
+} else {
+document.getElementById("minutes").innerHTML = minutes;
+}
+
+if (seconds < 10) {
+document.getElementById("seconds").innerHTML = "0" + seconds;
+} else {
+document.getElementById("seconds").innerHTML = seconds;
+}
+}, 1000);
+</script>
+</body>
+</html>
